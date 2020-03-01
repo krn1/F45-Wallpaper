@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WallPaper</string>
+    <string name="app_name">Wallpaper Screen</string>
 
     <string name="timer_text">00:0%d</string>
 </resources>
