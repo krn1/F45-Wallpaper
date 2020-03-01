@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class WallPaperScreenActivity : AppCompatActivity() {
     
     companion object {
-        private const val ROTATING_TIME_IN_MS = 1 * 1000L
+        private const val ROTATING_TIME_IN_MS = 5 * 1000L
         private const val TIME_ONE_MS = 1 * 1000L
         private const val TIME_SIXTY_SEC = 2 * 1000L
     }
@@ -62,7 +62,7 @@ class WallPaperScreenActivity : AppCompatActivity() {
      *  Displays the next wall paper slide
      */
     private fun showNextSlide() {
-        view.background = wallPaperManager.nextSlide()
+        view.background = wallPaperManager.rotate()
     }
     // endregion
 }

@@ -14,54 +14,54 @@ import androidx.core.content.ContextCompat
 class WallPaperManager(private val context: Context) {
     
     private var currentColor: Int = R.color.yellow
-    private var currentWallpaper: Drawable
+    private var currentSlide: Drawable
     
-    private val rectangularWallpaper: GradientDrawable
-    private val circularWallpaper: GradientDrawable
-    private val triangularWallpaper: LayerDrawable
+    private val rectangularVector: GradientDrawable
+    private val circularVector: GradientDrawable
+    private val triangularVector: LayerDrawable
     
     init {
-        rectangularWallpaper =
+        rectangularVector =
             ContextCompat.getDrawable(context, R.drawable.rectangle)?.mutate()!! as GradientDrawable
-        circularWallpaper =
+        circularVector =
             ContextCompat.getDrawable(context, R.drawable.circle)?.mutate()!! as GradientDrawable
-        triangularWallpaper =
+        triangularVector =
             ContextCompat.getDrawable(context, R.drawable.triangle)!!.mutate() as LayerDrawable
         
-        currentWallpaper = triangularWallpaper
-        createNextWallPaperImage()
+        currentSlide = triangularVector
+        createNextSlide()
     }
     
     // region helper methods
-    fun nextSlide() : Drawable{
-        createNextWallPaperImage()
+    fun rotate() : Drawable{
+        createNextSlide()
         return currentSlide()
     }
     
     fun currentSlide(): Drawable {
-        return currentWallpaper
+        return currentSlide
     }
     // endregion helper methods
     
     // region private
     /**
-     *  Creates the next wallpaper slide from the combination of color and the shape in
+     *  Creates the next slide from the combination of color and the shape in
      *  a sequence
      */
-    private fun createNextWallPaperImage() {
+    private fun createNextSlide() {
         updateNextColor()
         updateNextShape()
         if (isTriangle()) {
-            val rotateDrawable = triangularWallpaper
+            val rotateDrawable = triangularVector
                 .findDrawableByLayerId(R.id.item_triangle).mutate() as RotateDrawable
             val drawable = rotateDrawable.drawable!!.mutate() as GradientDrawable
             
             drawable.setColor(ContextCompat.getColor(context, currentColor))
-            currentWallpaper = triangularWallpaper
+            currentSlide = triangularVector
         } else {
-            val drawable = currentWallpaper.mutate() as GradientDrawable
+            val drawable = currentSlide.mutate() as GradientDrawable
             drawable.setColor(ContextCompat.getColor(context, currentColor))
-            currentWallpaper = drawable
+            currentSlide = drawable
         }
     }
     
@@ -84,18 +84,18 @@ class WallPaperManager(private val context: Context) {
      *  Updates the shape in a sequence to create next slide
      */
     private fun updateNextShape() {
-        when (currentWallpaper) {
+        when (currentSlide) {
             
-            rectangularWallpaper -> currentWallpaper = circularWallpaper
-            circularWallpaper -> currentWallpaper = triangularWallpaper
+            rectangularVector -> currentSlide = circularVector
+            circularVector -> currentSlide = triangularVector
             else -> {
-                currentWallpaper = rectangularWallpaper
+                currentSlide = rectangularVector
             }
         }
     }
     
     private fun isTriangle(): Boolean {
-        return currentWallpaper == triangularWallpaper;
+        return currentSlide == triangularVector;
     }
     
     // endregion
