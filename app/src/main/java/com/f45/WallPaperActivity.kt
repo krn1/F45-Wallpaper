@@ -1,11 +1,11 @@
 package com.f45
 
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,13 +14,17 @@ class WallPaperActivity : AppCompatActivity() {
     
     private var wallPaperTimer: CountDownTimer? = null
     private var currentColor: Int = R.color.red
-    private var currentShape: Int = R.drawable.rectangle
+    
+    private lateinit var currentShape: Drawable
+    private lateinit var rectangle: GradientDrawable
+    private lateinit var circle: GradientDrawable
+    private lateinit var triangle: LayerDrawable
     
     // region override
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+        init()
         setWallPaperImage()
     }
     
@@ -63,20 +67,15 @@ class WallPaperActivity : AppCompatActivity() {
     }
     
     private fun setWallPaperImage() {
-        val drawable: GradientDrawable
         if (isTriangle()) {
-            Log.e("", "Triangle");
-            val layerDrawable =
-                ContextCompat.getDrawable(this, currentShape)!!.mutate() as LayerDrawable
-            val rotateDrawable = layerDrawable
+            val rotateDrawable = triangle
                 .findDrawableByLayerId(R.id.item_triangle).mutate() as RotateDrawable
-            drawable = rotateDrawable.drawable!!.mutate() as GradientDrawable
+            val drawable = rotateDrawable.drawable!!.mutate() as GradientDrawable
             
             drawable.setColor(ContextCompat.getColor(this, currentColor));
-            view.background = layerDrawable
+            view.background = triangle
         } else {
-            drawable = ContextCompat.getDrawable(this, currentShape)?.mutate()!! as GradientDrawable
-            Log.e("", "not a Triangle");
+            val drawable = currentShape.mutate() as GradientDrawable
             drawable.setColor(ContextCompat.getColor(this, currentColor));
             view.background = drawable
         }
@@ -96,18 +95,29 @@ class WallPaperActivity : AppCompatActivity() {
     
     private fun nextShape() {
         when (currentShape) {
-            R.drawable.rectangle -> currentShape = R.drawable.circle
-            R.drawable.circle -> currentShape = R.drawable.triangle
-            R.drawable.triangle -> currentShape = R.drawable.rectangle
+            
+            rectangle -> currentShape = circle
+            circle -> currentShape = triangle
             else -> {
-                currentShape = R.drawable.rectangle
+                currentShape = rectangle
             }
         }
     }
     
     private fun isTriangle(): Boolean {
-        return currentShape == R.drawable.triangle;
+        return currentShape == triangle;
     }
     
+    private fun init() {
+        rectangle =
+            ContextCompat.getDrawable(this, R.drawable.rectangle)?.mutate()!! as GradientDrawable
+        circle = ContextCompat.getDrawable(this, R.drawable.circle)?.mutate()!! as GradientDrawable
+        triangle = ContextCompat.getDrawable(this, R.drawable.triangle)!!.mutate() as LayerDrawable
+        
+        rectangle.setColor(ContextCompat.getColor(this, currentColor));
+        view.background = rectangle
+    
+        currentShape = rectangle
+    }
     // endregion
 }
