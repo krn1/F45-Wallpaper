@@ -1,4 +1,4 @@
-package com.wallpaper
+package com.f45
 
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -10,17 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class WallPaperActivity : AppCompatActivity() {
     
     private var wallPaperTimer: CountDownTimer? = null
     private var currentColor: Int = R.color.red
     private var currentShape: Int = R.drawable.rectangle
     
+    // region override
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
-        startWallPaper()
+        setWallPaperImage()
     }
     
     override fun onStart() {
@@ -32,14 +33,9 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         stopWallpaperTimer()
     }
+    // endregion
     
     // region private
-    
-    private fun startWallPaper() {
-        val drawable = ContextCompat.getDrawable(this, currentShape)?.mutate()!! as GradientDrawable
-        drawable.setColor(ContextCompat.getColor(this, currentColor));
-        view.background = drawable
-    }
     
     private fun stopWallpaperTimer() {
         wallPaperTimer?.cancel()
@@ -49,8 +45,7 @@ class MainActivity : AppCompatActivity() {
         wallPaperTimer = object : CountDownTimer(6 * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val second = millisUntilFinished / 1000 % 60
-                val timerText = resources.getString(R.string.timer_text, second) //"You have 4 new messages."
-                timer.text = timerText
+                timer.text = getString(R.string.timer_text, second)
             }
             
             override fun onFinish() {
@@ -62,7 +57,12 @@ class MainActivity : AppCompatActivity() {
     private fun changeWallpaper() {
         nextColor()
         nextShape()
+        setWallPaperImage()
         
+        startWallpaperTimer()
+    }
+    
+    private fun setWallPaperImage() {
         val drawable: GradientDrawable
         if (isTriangle()) {
             Log.e("", "Triangle");
@@ -80,8 +80,6 @@ class MainActivity : AppCompatActivity() {
             drawable.setColor(ContextCompat.getColor(this, currentColor));
             view.background = drawable
         }
-        
-        startWallpaperTimer()
     }
     
     private fun nextColor() {

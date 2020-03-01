@@ -1,4 +1,4 @@
-package com.wallpaper
+package com.f45
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

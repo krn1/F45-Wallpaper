@@ -1,4 +1,4 @@
-package com.wallpaper
+package com.f45
 
 import org.junit.Test
 

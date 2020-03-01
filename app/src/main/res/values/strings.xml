@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">WallPaper</string>
 
-    <string name="reset_instructions">Press the timer at any time to reset the wallpaper</string>
     <string name="timer_text">00:0%d</string>
 </resources>
